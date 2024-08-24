@@ -1,54 +1,70 @@
-const {v4: uuid} = require("uuid")
-
-var usuarios = [
-    { id: 1, nome: "João da Silva", email: "yXU6x@example.com", senha: "123456" },
-    { id: 2, nome: "Maria da Silva", email: "g9zQo@example.com", senha: "123456" },
-    { id: 3, nome: "Jose da Silva", email: "yXU6x@example.com", senha: "123456" }
-]
+const usuariosModel = require("../../database/models/usuarios")
+const { hash } = require("bcrypt")
 
 class UsuariosServices {
 
-    createUser(usuarioDTO) {
-       const usuarioExiste = usuariosServices.findByEmail(usuarioDTO.email)
-
-       if (usuarioExiste) {
-           return res.status(400).json({
-               message: "Email ja existe"
-           })
-       }
-
-       const novoUsuario = {
-           id: uuid(),
-           ...usuarioDTO
-       }
-       usuarios.push(novoUsuario)
-       return novoUsuario
-    }
-
-    listUsers() {
+    async listUsers() {
+        const usuarios = await usuariosModel.findAll({
+            attributes: ["id", "nome", "sobrenome", "email", "createdAt", "updatedAt"],
+        })
         return usuarios
     }
 
-    updateUser({ id, nome, email, senha }) {
-        const index = usuarios.findIndex(u => u.id == id)
-        const novoUsuario = {
+    async createUser({ email, nome, sobrenome, senha }) {
+        const usuarioExiste = await usuariosModel.findOne({ where: { email: email } })
+
+        if (usuarioExiste) {
+            return {
+                message: "Usuário já existe"
+            }
+        }
+
+        const senhaCriptografada = await hash(senha, 8)
+
+        const novoUsuarioCriado = await usuariosModel.create({
+            email,
+            nome,
+            sobrenome,
+            senha: senhaCriptografada
+        })
+
+        return novoUsuarioCriado
+    }
+
+    async updateUser(usuario) {
+        const usuarioConsulta = usuariosModel.findByPk(usuario.id)
+
+        if (!usuarioConsulta) {
+            return {
+                message: "Usuário não encontrado",
+            }
+        }
+
+        const usuarioAtualizar = {
             id,
             nome,
             email,
             senha
         }
-        usuarios[index] = novoUsuario
-        return novoUsuario
+
+        const usuarioAtualizado = await usuarios.update(usuarioAtualizar, { where: { id } })
+
+        return usuarioAtualizado
     }
 
-    deleteUser({ id }) {
-        const usuarioExiste = usuarios.find(usuario => usuario.id === id)
+    async deleteUser(id) {
+        const usuarioExiste = await usuariosModel.findByPk(id)
 
-        if(!usuarioExiste) {
-            return false
+        if (!usuarioExiste) {
+            return {
+                message: "Usuário não encontrado",
+            }
         }
-        return true
+
+        const usuarioApagar = await usuariosModel.destroy({ where: { id } })
+
+        return true;
     }
 }
 
-module.exports = UsuariosServices
+module.exports = new UsuariosServices()
