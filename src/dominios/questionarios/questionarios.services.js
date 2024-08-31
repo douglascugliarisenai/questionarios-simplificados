@@ -1,23 +1,44 @@
-const Perguntas = require("../../database/models/perguntas")
-const questionariosModel = require("../../database/models/questionarios")
+const PerguntasModel = require("../../database/models/perguntas")
+const RespostaModel = require("../../database/models/respostas")
+const QuestionariosModel = require("../../database/models/questionarios")
 class QuestionariosServices {
+
+    async createQuestionario({ titulo, descricao, perguntas }) {
+        const questionario = await QuestionariosModel.create({
+            titulo,
+            descricao,
+            perguntas
+        },{
+                include: [
+                    {
+                        model: PerguntasModel,
+                        as: "perguntas"
+                    }
+                ]
+            });
+
+        return questionario;
+    }
+
     async listQuestionarios() {
-        const questionarios = await questionariosModel.findAll()
+        const questionarios = await QuestionariosModel.findAll({
+            include: [
+                {
+                    model: PerguntasModel,
+                    as: "perguntas",
+                }
+            ]
+        })
         return questionarios
     }
 
-    async createQuestionario({ titulo, descricao }) {
-        const questionario = await questionariosModel.create({ titulo, descricao, perguntas })
-        return questionario
-    }
-
     async deleteQuestionario(id) {
-        const questionario = await questionariosModel.destroy({ where: { id } })
+        const questionario = await QuestionariosModel.destroy({ where: { id } })
         return questionario
     }
 
     async updateQuestionario(id, { titulo, descricao }) {
-        const questionario = await questionariosModel.update({ titulo, descricao }, { where: { id } })
+        const questionario = await QuestionariosModel.update({ titulo, descricao }, { where: { id } })
         return questionario
     }
 }

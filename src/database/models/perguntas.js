@@ -1,7 +1,6 @@
 const Sequelize = require('sequelize')
 const connection = require("../connection");
 
-
 const Perguntas = connection.define('perguntas', {
     id: {
         type: Sequelize.STRING,
@@ -32,5 +31,7 @@ const Perguntas = connection.define('perguntas', {
         defaultValue: Sequelize.NOW,
     },
 })
+
+  
 
 module.exports = Perguntas
