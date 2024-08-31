@@ -54,7 +54,6 @@ class UsuariosServices {
 
     async deleteUser(id) {
         const usuarioExiste = await usuariosModel.findByPk(id)
-
         if (!usuarioExiste) {
             return {
                 message: "Usuário não encontrado",

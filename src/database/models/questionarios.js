@@ -28,9 +28,14 @@ const Questionarios = connection.define('questionarios', {
   },
 })
 
+Perguntas.belongsTo(Questionarios, {
+  foreignKey: 'questionarioId',
+  as: 'questionario'
+});
 Questionarios.hasMany(Perguntas, {
   foreignKey: 'questionarioId',
   as: 'perguntas'
-})
+});
+
 
 module.exports = Questionarios
