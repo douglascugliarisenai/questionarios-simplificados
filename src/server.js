@@ -1,18 +1,39 @@
 const express = require("express")
-const UsuariosControllers = require("./dominios/usuarios/usuarios.controllers")
+const cors = require('cors')
+const routes = require("./routes/routes")
+const connection = require("./database/connection")
+const APP_PORT = process.env.APP_PORT
 
-const app = express()
-app.use(express.json())
+class Server {
+    
+    constructor(server = express()) {
+        this.middlewares(server)
+        this.database()
+        server.use(routes)
+        this.initializeServer(server)
+    }
 
-const usuariosControllers = new UsuariosControllers()
+    async middlewares(server) {
+        console.log("Executando os middlewares")
+        server.use(cors()) // Quando tiver em Produção Habilita os Cors
+        server.use(express.json())
+        console.log("Middlewares executados")
+    }
 
-/** Rota para listagem de usuários */
-app.get("/usuarios", usuariosControllers.index)
+    async database() {
+        try {
+            console.log("Conectando ao banco de dados")
+            await connection.authenticate()
+        } catch (error) {
+            console.log("Erro ao conectar ao banco de dados: ", error)
+        }
+    }
 
-/** Rota para criar um novo usuario */
-app.post("/usuarios", usuariosControllers.create)
+    async initializeServer(server) {
+        server.listen(APP_PORT, () => {
+            console.log(`Servidor rodando na porta ${APP_PORT}!`)
+        })
+    }
+}
 
-/** Rota para deletar um usuario */
-app.delete("/usuarios/:id", usuariosControllers.delete)
-
-app.listen(3000, () => console.log("Server running at http://localhost:3000"))
+module.exports = { Server }
