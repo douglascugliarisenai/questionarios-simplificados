@@ -1,11 +1,13 @@
+const RespostaModel = require("../../database/models/respostas")
+
 class RespostasServices {
     async listRespostas() {
-        const respostas = await Resposta.findAll()
+        const respostas = await RespostaModel.findAll()
         return respostas
     }
 
     async createResposta({ conteudo, perguntaId, usuarioId }) {
-        const resposta = await Resposta.create({ 
+        const resposta = await RespostaModel.create({ 
             conteudo,
             perguntaId,
             usuarioId
@@ -15,14 +17,14 @@ class RespostasServices {
     }
 
     async deleteResposta({ id }) {
-        const resposta = await Resposta.findByPk({ where: { id } })
+        const resposta = await RespostaModel.findByPk({ where: { id } })
 
         if (!resposta) {
             return {
                 message: "Resposta não encontrada"
             }
         }
-        await Resposta.destroy({ where: { id } })
+        await RespostaModel.destroy({ where: { id } })
         
         return {
             message: "Resposta apagada com sucesso"
@@ -30,7 +32,7 @@ class RespostasServices {
     }
 
     async updateResposta({ id, ...body }) {
-        const resposta = await Resposta.update({ ...body }, { where: { id } })
+        const resposta = await RespostaModel.update({ ...body }, { where: { id } })
         return resposta
     }
 }   
