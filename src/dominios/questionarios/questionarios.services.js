@@ -1,5 +1,4 @@
 const PerguntasModel = require("../../database/models/perguntas")
-const RespostaModel = require("../../database/models/respostas")
 const QuestionariosModel = require("../../database/models/questionarios")
 class QuestionariosServices {
 
@@ -29,6 +28,11 @@ class QuestionariosServices {
                 }
             ]
         })
+
+        if(!questionarios) {
+            return null
+        }
+        
         return questionarios
     }
 
