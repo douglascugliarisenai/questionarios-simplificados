@@ -30,7 +30,6 @@ function validarAutenticacao(req, res, next) {
     } catch (error) {
         return res.status(401).json({ message: "Token não informado" })
     }
-    next()
 }
 
 /**

@@ -25,6 +25,9 @@ const Usuario = connection.define('usuarios', {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      role: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW

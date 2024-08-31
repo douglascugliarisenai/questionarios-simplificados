@@ -5,12 +5,12 @@ class UsuariosServices {
 
     async listUsers() {
         const usuarios = await usuariosModel.findAll({
-            attributes: ["id", "nome", "sobrenome", "email", "createdAt", "updatedAt"],
+            attributes: ["id", "nome", "sobrenome", "email","role", "createdAt", "updatedAt"],
         })
         return usuarios
     }
 
-    async createUser({ email, nome, sobrenome, senha }) {
+    async createUser({ email, nome, sobrenome, senha, role }) {
         const usuarioExiste = await usuariosModel.findOne({ where: { email: email } })
 
         if (usuarioExiste) {
@@ -25,6 +25,7 @@ class UsuariosServices {
             email,
             nome,
             sobrenome,
+            role,
             senha: senhaCriptografada
         })
 

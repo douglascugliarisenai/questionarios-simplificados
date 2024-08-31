@@ -2,7 +2,6 @@ const Sequelize = require('sequelize')
 const connection = require("../connection");
 const Perguntas = require('./perguntas')
 
-
 const Questionarios = connection.define('questionarios', {
   id: {
     type: Sequelize.STRING,
@@ -36,6 +35,5 @@ Questionarios.hasMany(Perguntas, {
   foreignKey: 'questionarioId',
   as: 'perguntas'
 });
-
 
 module.exports = Questionarios

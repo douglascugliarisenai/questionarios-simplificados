@@ -6,11 +6,10 @@
   "scripts": {
     "start:prod": "NODE_ENV=production node src/index.js",
     "start:dev": "NODE_ENV=development nodemon src/index.js",
-    "db:migrate": "npx sequelize-cli db:migrate",
-    "db:migrate:undo": "npx sequelize-cli db:migrate:undo:all",
-    "db:seed": "npx sequelize-cli db:seed:all",
-    "db:seed:undo": "npx sequelize-cli db:seed:undo:all",
-    "swagger": "node src/config/docs/autoGen.swagger.js"
+    "db:migrate": "NODE_ENV=development npx sequelize-cli db:migrate",
+    "db:migrate:undo": "NODE_ENV=development npx sequelize-cli db:migrate:undo:all",
+    "db:seed": "NODE_ENV=development npx sequelize-cli db:seed:all",
+    "db:seed:undo": "NODE_ENV=development npx sequelize-cli db:seed:undo:all"
   },
   "author": "",
   "license": "ISC",
