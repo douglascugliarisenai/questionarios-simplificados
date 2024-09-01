@@ -1,3 +1,4 @@
+const { request } = require("http")
 const { verify } = require("jsonwebtoken")
 
 /**
@@ -38,33 +39,34 @@ function validarAutenticacao(req, res, next) {
  * @returns {import('express').RequestHandler}
  */
 function validarAutenticacaoRBAC(permissaoParametro) {
+    console.log(permissaoParametro)
     return (req, res, next) => {
-        const { authorization } = req.headers
-    
+        const { authorization } = req.headers;
+
         if (!authorization) {
-            return res.status(401).json({ message: "Token não informado" })
+            return res.status(401).json({ message: "Token não informado" });
         }
-    
-        
-        // Bearer [token...]
-        const [, token] = authorization.split(' ')
-    
+
+        const [, token] = authorization.split(' ');
+
         try {
-            const decoded = verify(token, jwtSecret)
-    
+            const decoded = verify(token, process.env.JWT_SECRET);
+
             const { sub, permissao } = decoded;
-            
-            if(permissao !== permissaoParametro) throw new Error("usuario não possui permissão para essa operação")
-    
-            request.usuario = {
+
+            if (permissao !== permissaoParametro) {
+                return res.status(403).json({ message: "Usuário não possui permissão para essa operação" });
+            }
+
+            req.usuario = {
                 id: sub,
                 permissao
-            }
-            next()
+            };
+            next();
         } catch (error) {
-            return res.status(401).json({ message: "Token não informado" })
+            return res.status(401).json({ message: "Token inválido" });
         }
-    }
+    };
 }
 
 module.exports = { validarAutenticacao,validarAutenticacaoRBAC }
