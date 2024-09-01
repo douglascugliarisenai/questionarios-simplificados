@@ -3,6 +3,7 @@ const yup = require('yup')
 
 const questionarioController = require('../dominios/questionarios/questionarios.controllers')
 const { validarSchema } = require('../middlewares/validacaoRotas')
+const { validarAutenticacaoRBAC } = require('../middlewares/validarAutenticacao')
 
 const questionarioRoutes = new Router()
 
@@ -32,7 +33,7 @@ const schemaUpdateQuestionario = yup.object({
     })
 })
 
-
+questionarioRoutes.use(validarAutenticacaoRBAC('criador'))
 questionarioRoutes.get('/', questionarioController.index);
 questionarioRoutes.post('/', validarSchema(schemaPostQuestionario), questionarioController.createQuestionario);
 questionarioRoutes.delete('/:id', validarSchema(schemaDeleteQuestionario), questionarioController.deleteQuestionario);
