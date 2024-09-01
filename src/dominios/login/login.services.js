@@ -14,8 +14,6 @@ class LoginServices {
             }
         }
 
-        // const senhaCriptografada = await hash(senha, usuario.senha)
-
         const senhaCorreta = await compare(senha, usuario.senha)
 
         if (!senhaCorreta) {
@@ -24,7 +22,7 @@ class LoginServices {
             }
         }
 
-        const token = sign({ permissao: 'criador' }, process.env.JWT_SECRET, {
+        const token = sign({ permissao: usuario.role }, process.env.JWT_SECRET, {
             subject: usuario.id,
             expiresIn: "1d"
         })
