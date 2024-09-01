@@ -13,7 +13,31 @@ const schemaPostLogin = yup.object({
 
 const loginRoutes = new Router()
 
-loginRoutes.post('/', validarSchema(schemaPostLogin), LoginControllers.createLogin);
+loginRoutes.post('/', validarSchema(schemaPostLogin), LoginControllers.createLogin
+    /*  #swagger.tags = ['Login']
+        #swagger.path = '/login'
+        #swagger.method = 'post'
+        #swagger.description = 'Endpoint para realizar login'
+        #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'Informações do login',
+            required: true,
+            schema: {
+                "$email": "Email",
+                "$senha": "Senha"
+            }
+        }
+        #swagger.responses[200] = {
+            description: 'OK'
+        }
+        #swagger.responses[400] = {
+            description: 'Email ou senha inválidos'
+        }
+        #swagger.responses[500] = {
+            description: 'Internal Server Error'
+        }   
+    */
+);
 
 
 module.exports = loginRoutes

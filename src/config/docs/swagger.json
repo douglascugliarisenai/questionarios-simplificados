@@ -1,0 +1,513 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "API de Questionários e Respostas",
+    "description": "API de Questionários e Respostas",
+    "version": "1.0.0"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "securityDefinitions": {
+    "apiKeyAuth": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "Authorization",
+      "description": "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\""
+    }
+  },
+  "paths": {
+    "/login": {
+      "post": {
+        "tags": [
+          "Login"
+        ],
+        "description": "Endpoint para realizar login",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Informações do login",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "Email"
+                },
+                "senha": {
+                  "type": "string",
+                  "example": "Senha"
+                }
+              },
+              "required": [
+                "email",
+                "senha"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Email ou senha inválidos"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/usuarios/": {
+      "post": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "Cria um novo Usuário",
+        "description": "Endpoint para criar um novo Usuário",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Informações do novo Usuário",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nome": {
+                  "type": "string",
+                  "example": "Nome"
+                },
+                "sobrenome": {
+                  "type": "string",
+                  "example": "Sobrenome"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "Email"
+                },
+                "senha": {
+                  "type": "string",
+                  "example": "Senha"
+                },
+                "role": {
+                  "type": "string",
+                  "example": "Role"
+                }
+              },
+              "required": [
+                "nome",
+                "sobrenome",
+                "email",
+                "senha",
+                "role"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Usuário criado com sucesso"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "Endpoint para listar os usuários",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Usuários listados com sucesso"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/{id}": {
+      "delete": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "Endpoint para deletar um usuário",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Usuário deletado com sucesso"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/questionarios": {
+      "get": {
+        "tags": [
+          "Questionarios"
+        ],
+        "description": "Lista todos os questionários",
+        "responses": {
+          "200": {
+            "description": "Questionários listados com sucesso"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Questionarios"
+        ],
+        "description": "Cria um questionário",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Informações do questionário",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "titulo": {
+                  "type": "string",
+                  "example": "Títutlo"
+                },
+                "descricao": {
+                  "type": "string",
+                  "example": "Descricão"
+                },
+                "perguntas": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "descricao": {
+                        "type": "string",
+                        "example": "Descricão da pergunta"
+                      }
+                    },
+                    "required": [
+                      "descricao"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "titulo",
+                "descricao",
+                "perguntas"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Questionário criado com sucesso"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/questionarios/{id}": {
+      "delete": {
+        "tags": [
+          "Questionarios"
+        ],
+        "description": "Deleta um questionário",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Questionário deletado com sucesso"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Questionarios"
+        ],
+        "description": "Atualiza um questionário",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Questionário atualizado com sucesso"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Questionario"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/respostas": {
+      "get": {
+        "tags": [
+          "Respostas"
+        ],
+        "summary": "Endpoint para buscar todas as respostas",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Respostas encontradas com sucesso"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/respostas/{perguntaId}": {
+      "post": {
+        "tags": [
+          "Respostas"
+        ],
+        "summary": "Endpoint para criar uma nova resposta",
+        "description": "",
+        "parameters": [
+          {
+            "name": "perguntaId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Id da pergunta"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Informação da resposta",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "descricao": {
+                  "type": "string",
+                  "example": "Descricão da resposta"
+                }
+              },
+              "required": [
+                "descricao"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Resposta criada com sucesso"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/respostas/{id}": {
+      "delete": {
+        "tags": [
+          "Respostas"
+        ],
+        "summary": "Endpoint para deletar uma resposta",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Resposta deletada com sucesso"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Respostas"
+        ],
+        "summary": "Endpoint para atualizar uma resposta",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Informação da resposta",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "descricao": {
+                  "type": "string",
+                  "example": "Descricão da resposta"
+                }
+              },
+              "required": [
+                "descricao"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resposta atualizada com sucesso"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "security": [
+    {
+      "apiKeyAuth": []
+    }
+  ]
+}
